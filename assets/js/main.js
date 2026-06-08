@@ -129,3 +129,45 @@
 
   counters.forEach(function(c) { counterObserver.observe(c); });
 })();
+
+/* ============================================================
+   WhatsApp widget — popup de chat
+============================================================ */
+(function() {
+  var widget = document.getElementById('wa-widget');
+  var toggle = document.getElementById('wa-toggle');
+  var card = document.getElementById('wa-card');
+  var closeBtn = document.getElementById('wa-close');
+  if (!widget || !toggle || !card) return;
+
+  function openCard() {
+    widget.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    card.setAttribute('aria-hidden', 'false');
+  }
+  function closeCard() {
+    widget.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    card.setAttribute('aria-hidden', 'true');
+  }
+
+  toggle.addEventListener('click', function() {
+    if (widget.classList.contains('open')) {
+      closeCard();
+    } else {
+      openCard();
+    }
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeCard);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeCard();
+  });
+
+  document.addEventListener('click', function(e) {
+    if (widget.classList.contains('open') && !widget.contains(e.target)) {
+      closeCard();
+    }
+  });
+})();

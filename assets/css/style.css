@@ -836,28 +836,40 @@ section[id] {
 /* ============================================================
    WhatsApp flutuante (mobile only)
 ============================================================ */
-.whatsapp-float {
+/* WhatsApp widget — botão flutuante + card de chat */
+.wa-widget {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+/* Botão flutuante (gatilho) */
+.wa-toggle {
+  position: relative;
   width: 56px;
   height: 56px;
   background: #25D366;
+  border: none;
   border-radius: 50%;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 900;
+  cursor: pointer;
   transition: transform 200ms var(--transition);
 }
-.whatsapp-float:hover {
+.wa-toggle:hover {
   transform: scale(1.08);
 }
-.whatsapp-float:focus-visible {
+.wa-toggle:focus-visible {
   outline: 2px solid var(--dourado);
   outline-offset: 3px;
 }
-.whatsapp-float::before {
+.wa-toggle::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -865,15 +877,127 @@ section[id] {
   border: 2px solid #25D366;
   animation: pulse-ring 2s ease-out infinite;
 }
+.wa-widget.open .wa-toggle::before {
+  animation: none;
+}
 @keyframes pulse-ring {
   0%   { transform: scale(1); opacity: 0.4; }
   100% { transform: scale(1.5); opacity: 0; }
 }
-.whatsapp-float svg {
+.wa-toggle svg {
   width: 28px;
   height: 28px;
   color: white;
   flex-shrink: 0;
+}
+
+/* Card de chat */
+.wa-card {
+  width: 300px;
+  max-width: calc(100vw - 40px);
+  background: var(--branco);
+  border: 0.5px solid var(--cinza-claro);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(26, 58, 92, 0.18);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 220ms var(--transition), transform 220ms var(--transition), visibility 220ms;
+}
+.wa-widget.open .wa-card {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.wa-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #075E54;
+  color: #fff;
+}
+.wa-avatar {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wa-avatar svg {
+  width: 22px;
+  height: 22px;
+  color: #fff;
+}
+.wa-card-id {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  flex: 1;
+  min-width: 0;
+}
+.wa-card-id strong {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.wa-status {
+  font-size: 0.72rem;
+  opacity: 0.85;
+}
+.wa-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.8;
+  padding: 0 2px;
+  transition: opacity 200ms;
+}
+.wa-close:hover {
+  opacity: 1;
+}
+
+.wa-card-body {
+  padding: 20px 16px;
+  background: #ECE5DD;
+}
+.wa-bubble {
+  position: relative;
+  background: var(--branco);
+  border-radius: 0 10px 10px 10px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--azul-profundo);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.wa-card-cta {
+  display: block;
+  text-align: center;
+  background: #25D366;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 14px 16px;
+  transition: background 200ms;
+}
+.wa-card-cta:hover {
+  background: #1ebe5b;
+}
+.wa-card-cta:focus-visible {
+  outline: 2px solid var(--dourado);
+  outline-offset: -3px;
 }
 
 /* ============================================================
@@ -976,7 +1100,6 @@ section[id] {
   .nav-links,
   .header-nav .btn { display: none; }
   .hamburger { display: flex; }
-  .whatsapp-float { display: flex; }
 
   /* Hero */
   .hero-content {
@@ -1063,9 +1186,6 @@ section[id] {
 }
 
 
-@media (min-width: 1024px) {
-  .whatsapp-float { display: none !important; }
-}
 
 /* ============================================================
    Reduced motion
